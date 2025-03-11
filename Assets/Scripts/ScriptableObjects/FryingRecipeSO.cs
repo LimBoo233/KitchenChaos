@@ -1,13 +1,11 @@
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class CuttingRecipeSO : ScriptableObject {
+public class FryingRecipeSO : ScriptableObject {
 
 	[SerializeField] private KitchenObjectSO input;
 	[SerializeField] private KitchenObjectSO output;
-	[SerializeField] private int cuttingProgressMax;
-	
-	
+	[SerializeField] private float fryingTimerMax;
 	
 	public KitchenObjectSO GetInput() {
 		return input;
@@ -17,7 +15,7 @@ public class CuttingRecipeSO : ScriptableObject {
 		return output;
 	}
 	
-	public int GetCuttingProgressMax() {
-		return cuttingProgressMax;
+	public float GetFryingTimerMax() {
+		return fryingTimerMax;
 	}
 }
