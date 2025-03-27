@@ -1,11 +1,20 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlateKitchenObject : KitchenObject
 {
+	public EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+	public class OnIngredientAddedEventArgs : EventArgs
+	{
+		public KitchenObjectSO kitchenObjectSO;
+	}
+	
+	[SerializeField] private List<KitchenObjectSO> validKitchenObjectSOList;
 
-	[SerializeField] private List<KitchenObjectSO> kitchenObjectSOList;
+	private List<KitchenObjectSO> kitchenObjectSOList;
 
 	public void Awake()
 	{
@@ -14,12 +23,20 @@ public class PlateKitchenObject : KitchenObject
 
 	public bool TryAddIngredient(KitchenObjectSO kitchenObjectSO)
 	{
+		if (!validKitchenObjectSOList.Contains(kitchenObjectSO))
+		{
+			// 不是有效的成分
+			return false;
+		}
+
 		if (kitchenObjectSOList.Contains(kitchenObjectSO))
 		{
 			return false;
 		} else
 		{
 			kitchenObjectSOList.Add(kitchenObjectSO);
+			
+			OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs() {kitchenObjectSO = kitchenObjectSO});
 			return true;
 		}
 	}
