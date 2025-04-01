@@ -17,11 +17,20 @@ public class PlateCompleteVisual : MonoBehaviour
 	{
 		plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
 
-		void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
+		foreach (KitchenObjectSO_GameObject kitchenObjectSOGameObject in kitchenObjectSOGameObjectList)
 		{
-			throw new NotImplementedException();
+			kitchenObjectSOGameObject.gameObject.SetActive(false);
 		}
 	}
-
-
+	
+	private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs e)
+	{
+		foreach (KitchenObjectSO_GameObject kitchenObjectSOGameObject in kitchenObjectSOGameObjectList)
+		{
+			if (kitchenObjectSOGameObject.kitchenObjectSO == e.kitchenObjectSO)
+			{
+				kitchenObjectSOGameObject.gameObject.SetActive(true);
+			}
+		}
+	}
 }

@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class PlateKitchenObject : KitchenObject
 {
+	
 	public EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
 	public class OnIngredientAddedEventArgs : EventArgs
 	{
@@ -39,5 +40,10 @@ public class PlateKitchenObject : KitchenObject
 			OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs() {kitchenObjectSO = kitchenObjectSO});
 			return true;
 		}
+	}
+
+	public List<KitchenObjectSO> GetKitchenObjectSOList()
+	{
+		return kitchenObjectSOList;
 	}
 }
