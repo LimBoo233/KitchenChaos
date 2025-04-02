@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = System.Random;
 
 
 public class DeliveryManager : MonoBehaviour
 {
 	public static DeliveryManager Instance { get; private set; }
+
+	public event EventHandler OnRecipeSpawned;
+	public event EventHandler OnRecipeCompleted;
 
 	[SerializeField] private RecipeListSO recipeListSO;
 	private List<RecipeSO> waitingRecipeSOList;
@@ -15,13 +17,10 @@ public class DeliveryManager : MonoBehaviour
 	private float spawnRecipeTimerMax = 4f;
 	private int waitingRecipeMax = 4;
 
-	private Random random;
-
 	private void Awake()
 	{
 		Instance = this;
 		
-		random = new Random();
 		waitingRecipeSOList = new List<RecipeSO>();
 	}
 
@@ -34,9 +33,10 @@ public class DeliveryManager : MonoBehaviour
 
 			if (waitingRecipeSOList.Count < waitingRecipeMax)
 			{
-				RecipeSO waitingRecipeSO = recipeListSO.GetRecipeSOList()[random.Next(0, recipeListSO.GetRecipeSOList().Count)];
-				Debug.Log(waitingRecipeSO.GetRecipeName());
+				RecipeSO waitingRecipeSO = recipeListSO.GetRecipeSOList()[UnityEngine.Random.Range(0, recipeListSO.GetRecipeSOList().Count)];
 				waitingRecipeSOList.Add(waitingRecipeSO);
+				
+				OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
 			}
 		}
 	}
@@ -76,11 +76,16 @@ public class DeliveryManager : MonoBehaviour
 				if (plateContentsMatchesRecipe)
 				{
 					// 玩家搭配出正确的食谱
-					Debug.Log("You delivered the correct recipe!");
 					waitingRecipeSOList.RemoveAt(i);
+					OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
 					return;
 				}
 			}
 		}
+	}
+	
+	public List<RecipeSO> GetWaitingRecipeSOList()
+	{
+		return waitingRecipeSOList;
 	}
 }
