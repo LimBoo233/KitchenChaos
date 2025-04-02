@@ -26,7 +26,7 @@ public class PlateIconsUI : MonoBehaviour
 		foreach (Transform child in transform)
 		{
 			if (child == iconTemplate) continue;
-			Destroy(child);
+			Destroy(child.gameObject);
 		}
 		
 		foreach (KitchenObjectSO kitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList())
