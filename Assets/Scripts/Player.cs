@@ -6,6 +6,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 {
 	public static Player Instance { get; private set; }
 
+	public event EventHandler OnPickSomething;
+
 	// 选择counter事件，需要传入被选择的counter作为参数
 	public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
 
@@ -168,6 +170,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 	public void SetKitchenObject(KitchenObject kitchenObject)
 	{
 		this.kitchenObject = kitchenObject;
+
+		if (kitchenObject != null)
+		{
+			OnPickSomething?.Invoke(this, EventArgs.Empty);
+		}
 	}
 
 	public KitchenObject GetKitchenObject()
