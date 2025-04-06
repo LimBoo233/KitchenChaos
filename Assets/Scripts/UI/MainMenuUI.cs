@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour
@@ -21,6 +20,8 @@ public class MainMenuUI : MonoBehaviour
 			// 在editor模式里，这个方法不会起作用
 			Application.Quit();
 		});
+		
+		Time.timeScale = 1f;
 	}
 	
 }
