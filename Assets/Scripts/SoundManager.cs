@@ -74,9 +74,19 @@ public class SoundManager : MonoBehaviour
 		PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volumeMultiplier);
 	}
 
-	public void PlayFootStepSound(Vector3 position, float volume = 1f)
+	public void PlayFootStepSound(Vector3 position, float volume)
 	{
 		PlaySound(audioClipRefsSO.GetFootstep, position, volume);
+	}
+
+	public void PlayCountDownSound()
+	{
+		PlaySound(audioClipRefsSO.GetWarning, Vector3.zero);
+	}
+
+	public void PlayWarningSound(Vector3 position)
+	{
+		PlaySound(audioClipRefsSO.GetWarning, position);
 	}
 
 	public void ChangeVolume()

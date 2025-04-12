@@ -8,7 +8,7 @@ public class KitchenGameManager : MonoBehaviour
 	public event EventHandler OnStateChanged;
 	public event EventHandler OnGamePaused;
 	public event EventHandler OnGameUnpaused;
-	
+
 	private enum State
 	{
 		WaitingToStart,
@@ -18,7 +18,7 @@ public class KitchenGameManager : MonoBehaviour
 	}
 
 	private State state;
-	private float waitingToStartTimer = 1f;
+
 	private float countdownToStartTimer = 3f;
 	private float gamePlayingTimer;
 	private float gamePlayingTimerMax = 60f;
@@ -33,24 +33,28 @@ public class KitchenGameManager : MonoBehaviour
 	private void Start()
 	{
 		GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
+		GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
+	}
+
+	private void GameInput_OnInteractAction(object sender, EventArgs e)
+	{
+		if (state == State.WaitingToStart)
+		{
+			state = State.CountToStart;
+			OnStateChanged?.Invoke(this, EventArgs.Empty);
+		}
 	}
 
 	private void GameInput_OnPauseAction(object sender, EventArgs e)
 	{
 		TogglePauseGame();
 	}
-	
+
 	private void Update()
 	{
 		switch (state)
 		{
 			case State.WaitingToStart:
-				waitingToStartTimer -= Time.deltaTime;
-				if (waitingToStartTimer < 0f)
-				{
-					state = State.CountToStart;
-					OnStateChanged?.Invoke(this, EventArgs.Empty);
-				}
 				break;
 			case State.CountToStart:
 				countdownToStartTimer -= Time.deltaTime;
@@ -60,6 +64,7 @@ public class KitchenGameManager : MonoBehaviour
 					gamePlayingTimer = gamePlayingTimerMax;
 					OnStateChanged?.Invoke(this, EventArgs.Empty);
 				}
+
 				break;
 			case State.GamePlaying:
 				gamePlayingTimer -= Time.deltaTime;
@@ -68,6 +73,7 @@ public class KitchenGameManager : MonoBehaviour
 					state = State.GameOver;
 					OnStateChanged?.Invoke(this, EventArgs.Empty);
 				}
+
 				break;
 			case State.GameOver:
 				break;
@@ -98,7 +104,7 @@ public class KitchenGameManager : MonoBehaviour
 	{
 		return 1 - gamePlayingTimer / gamePlayingTimerMax;
 	}
-	
+
 	public void TogglePauseGame()
 	{
 		isGamePaused = !isGamePaused;
